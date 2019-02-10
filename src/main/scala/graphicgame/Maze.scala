@@ -57,10 +57,10 @@ trait Maze extends Serializable {
    * @param height The height of the rectangular region.
    */
   final def isClear(cx: Double, cy: Double, width: Double, height: Double, entity: Entity): Boolean = {
-    val sx = (cx - width / 2).toInt
-    val sy = (cy - height / 2).toInt
-    val ex = (cx + width / 2).toInt
-    val ey = (cy + height / 2).toInt
+    val sx = (cx - width / 2).floor.toInt
+    val sy = (cy - height / 2).floor.toInt
+    val ex = (cx + width / 2).floor.toInt
+    val ey = (cy + height / 2).floor.toInt
     (sx to ex).forall(x => (sy to ey).forall(y => apply(x, y).passable(entity)))
   }
 }
