@@ -1,6 +1,6 @@
 name := "GraphicalGame"
 version := "1.0"
-scalaVersion := "2.12.9"
+scalaVersion := "2.12.8"
 
 libraryDependencies ++= Seq(
 	"org.scalafx" %% "scalafx" % "8.0.192-R14",
