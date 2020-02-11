@@ -1,7 +1,7 @@
 package graphicgame
 
 trait Entity extends Serializable {
-  def name: String // Only used for 3D renderer, otherwise remove.
+  //def name: String // Only used for 3D renderer, otherwise remove.
   def x: Double
   def y: Double
   def width: Double
