@@ -5,7 +5,7 @@ class Level (val maze: Maze, private var _entities:Seq[Entity]){
     val currentLevel = this
 
     def entities: Seq[Entity] = {
-        _entities
+        _entities.filter(stillHere)
     }
 
     def +=(e: Entity): Unit = _entities +:= e

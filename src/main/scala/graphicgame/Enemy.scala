@@ -32,13 +32,42 @@ class Enemy (private var _x: Double, private var _y: Double, val level:Level) ex
         }
     }
 
-    def moveAllowed(dx: Double, dy: Double): Boolean = {
-        level.maze.isClear(_x + dx, _y + dy, width, height, enemy)
+        def move1():Unit = {
+        var dx:Double = 0
+        var dy:Double = 0
+        var n = util.Random.nextInt(4) match {
+            case 0 => dy += 0.3 //Up
+            case 1 => dy -= 0.3 //Down
+            case 2 => dx -= 0.3 //Left
+            case 3 => dx += 0.3 //Right
+        }
+
+        while(moveAllowed(dx, dy)){
+        _x += dx
+        _y += dy
+        }
     }
+
+    def moveAllowed(dx: Double, dy: Double): Boolean = {
+        level.maze.isClear(_x + dx, _y + dy, width, height, enemy) //&& intersects)
+    }
+
+    // def intersects: Boolean = {
+    //     for(i <- 0 until level.entities.length){
+    //         if(Entity.intersect(this, level.entities(i)) && level.entities(i) != this){
+    //             return false
+    //         }
+    //     }
+    //     return true
+    // }
 
     def update(delay: Double): Unit = {
         enemy.move()
+        //shortestpath
     }
+
     def postCheck(): Unit = ???
     def stillHere(): Boolean = true
+        
+
 }

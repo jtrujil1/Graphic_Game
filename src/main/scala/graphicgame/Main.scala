@@ -36,27 +36,8 @@ object Main extends JFXApp {
 		scene = new Scene(1000, 800) {
 			content = canvas
 
-			onKeyPressed = (ke: KeyEvent) => {
-        		ke.code match {
-					case KeyCode.Left => player.moveLeftPressed()
-          			case KeyCode.Right => player.moveRightPressed()
-					case KeyCode.Up => player.moveUpPressed()
-					case KeyCode.Down => player.moveDownPressed()
-					case KeyCode.Space => player.fireUpPressed()
-         			case _ =>
-       			 }
-			}
-
-			onKeyReleased = (ke: KeyEvent) => {
-        		ke.code match {
-          			case KeyCode.Left => player.moveLeftReleased()
-          			case KeyCode.Right => player.moveRightReleased()
-					case KeyCode.Up => player.moveUpReleased()
-					case KeyCode.Down => player.moveDownReleased()
-					case KeyCode.Space => player.fireUpReleased()
-         			case _ =>
-       			 }
-			}
+			onKeyPressed = (ke: KeyEvent) => player.keyPressed(ke.code)
+      		onKeyReleased = (ke: KeyEvent) => player.keyReleased(ke.code)
 
 			var lastTime = -1L
       		val timer = AnimationTimer(time => {
