@@ -48,19 +48,19 @@ class Player (private var _x: Double, private var _y: Double, val level: Level) 
         if (keysHeld(KeyCode.Left)) move(-0.2, 0, moveAllowed(_x - 0.2, _y))
         if (keysHeld(KeyCode.Right)) move(0.2, 0, moveAllowed(_x + 0.2, _y))
         if (keysHeld(KeyCode.W)){
-            var bullet = new Bullet(_x, _y - 0.2, level, "u")
+            var bullet = new Bullet(_x, _y - 0.5, level, "u")
             level += bullet
         }
         if (keysHeld(KeyCode.A)){
-            var bullet = new Bullet(_x - 0.2, _y, level, "l")
+            var bullet = new Bullet(_x - 0.5, _y, level, "l")
             level += bullet
         }
         if (keysHeld(KeyCode.S)){
-            var bullet = new Bullet(_x, _y + 0.2, level, "d")
+            var bullet = new Bullet(_x, _y + 0.5, level, "d")
             level += bullet
         }
         if (keysHeld(KeyCode.D)){
-            var bullet = new Bullet(_x + 0.2, _y, level, "r")
+            var bullet = new Bullet(_x + 0.5, _y, level, "r")
             level += bullet
         }
     }

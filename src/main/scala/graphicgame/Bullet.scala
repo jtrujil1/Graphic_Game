@@ -6,8 +6,7 @@ class Bullet(private var _x: Double, private var _y: Double, val level: Level, v
   def height: Double = 0.6
   def width: Double = 1
 
-  private var fallDelay = 0.0
-  val fallInterval = 0.08
+  val moveInterval = 0.05
   private var moveDelay = 0.0
   def currentBullet = this
 
@@ -22,11 +21,7 @@ class Bullet(private var _x: Double, private var _y: Double, val level: Level, v
   }
 
   def move(delay: Double, dir: String) = {
-    fallDelay += delay
     moveDelay += delay
-    println(delay)
-    println(fallInterval)
-    println(_x)
     var dx = 0.0
     var dy = 0.0
     dir match {
@@ -36,11 +31,12 @@ class Bullet(private var _x: Double, private var _y: Double, val level: Level, v
       case "r" => dx = 0.2
     }
 
-    if (fallDelay >= fallInterval && moveAllowed(_x + dx, _y + dy)){
+    if (moveDelay >= moveInterval && moveAllowed(_x + dx, _y + dy)){
         _y += dy
         _x += dx
-        fallDelay = 0.0
-    }else{
+        moveDelay = 0.0
+    }
+    if(moveAllowed(_x + dx, _y + dy) == false){
       stopped = true
     }
   }
