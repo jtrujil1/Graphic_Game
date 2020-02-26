@@ -5,7 +5,7 @@ class Level (val maze: Maze, private var _entities:Seq[Entity]){
     val currentLevel = this
 
     def entities: Seq[Entity] = {
-        _entities.filter(_.stillHere)
+        _entities
     }
 
     def enemies = entities.collect { case e: Enemy => e }
@@ -16,10 +16,25 @@ class Level (val maze: Maze, private var _entities:Seq[Entity]){
 
     def +=(e: Entity): Unit = _entities +:= e
 
+    // def enemyCreator() = {
+    //     var newEnemy = new Enemy (util.Random.nextInt(10)*5 - 3, util.Random.nextInt(10)*5 - 3, currentLevel)
+    //     currentLevel += newEnemy
+    // }
+
+    var counter = 0
+
     def updateAll(delay:Double): Unit = {
+        _entities = _entities.filter(_.stillHere)
         for(i <- 0 until _entities.length){
-            _entities(i).update(delay)
+                _entities(i).update(delay)
         }
+
+        // counter += 1
+
+        // if(counter > 14){
+        //     enemyCreator()
+        //     counter = 0
+        // }
     }
 
 }

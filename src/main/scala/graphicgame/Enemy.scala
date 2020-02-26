@@ -26,31 +26,24 @@ class Enemy (private var _x: Double, private var _y: Double, val level:Level) ex
         }
     }
 
-    val moveInterval = 0.05
-    private var moveDelay = 0.0
-
-    def move(delay: Double, dir: String) = {
-        //println(delay,moveDelay, dir)
-        moveDelay += delay
+    def move(dir: String) = {
         var dx = 0.0
         var dy = 0.0
         dir match {
-        case "u" => dy = -0.2
-        case "d" => dy = 0.2
-        case "l" => dx = -0.2
-        case "r" => dx = 0.2
+        case "u" => dy = -0.1
+        case "d" => dy = 0.1
+        case "l" => dx = -0.1
+        case "r" => dx = 0.1
         }
 
-        //println(moveInterval, moveAllowed(dx, dy))
-        if (moveAllowed(dx, dy) && moveDelay >= moveInterval){
+        if (moveAllowed(dx, dy)){
             _y += dy
             _x += dx
-            moveDelay = 0.0
         }
     }
 
     def moveAllowed(dx: Double, dy: Double): Boolean = {
-        level.maze.isClear(_x + dx, _y + dy, width, height, enemy) //&& intersects)
+        level.maze.isClear(_x + dx, _y + dy, width, height, enemy)
     }
 
     def intersects: Boolean = {
@@ -68,32 +61,38 @@ class Enemy (private var _x: Double, private var _y: Double, val level:Level) ex
         var up = ShortestPath.breadthFirstShortestPath(_x, _y - 1, level.players(0).x, level.players(0).y, enemy)
         var down = ShortestPath.breadthFirstShortestPath(_x, _y + 1, level.players(0).x, level.players(0).y, enemy)
         var left = ShortestPath.breadthFirstShortestPath(_x - 1, _y, level.players(0).x, level.players(0).y, enemy)
-        var right = ShortestPath.breadthFirstShortestPath(_x + 1, _y, level.players(0).x, level.players(0).y, enemy)
+        var right = ShortestPath.breadthFirstShortestPath(_x + 1, _y, level.players(0).x, level.players(0).y, enemy)    
 
-        // if(up == down || up == left || up == right) if(up != 1000000000) up += 2
-        // if(down == up || down == left || down == right) if(down != 1000000000) down -= 1
-        // if(left == up || left == down || left == right) if(left != 1000000000) left += 1
-        // if(right == up || right == down || right == left) if(right != 1000000000) right -= 2
+        if(up <= down && up <= left && up <= right) enemy.move("u")
+        if(left <= down && left <= up && left <= right) enemy.move("l")
+        if(right <= down && right <= left && right <= up) enemy.move("r")
+        if(down <= up && down <= left && down <= right) enemy.move("d")
+    }
 
-        println(up, down, left, right)        
-
-        if(up <= down && up <= left && up <= right) enemy.move(delay, "u")
-        if(left <= down && left <= up && left <= right) enemy.move(delay, "l")
-        if(right <= down && right <= left && right <= up) enemy.move(delay, "r")
-        if(down <= up && down <= left && down <= right) enemy.move(delay, "d")
+    def initialLocation(): Unit = {
+        while(!(moveAllowed(_x, _y))){
+            _x += 0.3
+            _y += 0.3
+        }
     }
 
     def postCheck(): Unit = ???
 
     def stillHere(): Boolean = {
         var ret = true
-        // if(level.bullets.length > 0){
-        //     for(i <- 0 until level.bullets.length){
-        //         if(Entity.intersect(this, level.bullets(i))){
-        //             ret = false
-        //         }
-        //     }
-        // }
+        if(level.bullets.length > 0){
+            for(i <- 0 until level.bullets.length){
+                if(Entity.intersect(this, level.bullets(i))){
+                    ret = false
+                //     var newEnemy1 = new Enemy (util.Random.nextInt(10)*5 - 3, util.Random.nextInt(10)*5 - 3, level)
+                //     newEnemy1.initialLocation()
+                //     level += newEnemy1
+                //     var newEnemy2 = new Enemy (util.Random.nextInt(10)*5 - 3, util.Random.nextInt(10)*5 - 3, level)
+                //     newEnemy2.initialLocation()
+                //     level += newEnemy2
+                }
+            }
+        }
         return ret
     }
         

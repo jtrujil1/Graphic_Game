@@ -18,18 +18,22 @@ object Main extends JFXApp {
 	val canvas = new Canvas(1000,800)
 	val gc = canvas.graphicsContext2D
 	val renderer = new Renderer2D(gc, 30)
-	val maze = RandomMaze(3, false, 20, 20, 0.6)
+	val maze = RandomMaze(4, false, 20, 20, 0.6)
 	var level1 = new Level(maze, Nil)
-	val enemy = new Enemy(59, 59, level1)
-	val enemy2 = new Enemy(59, 2, level1)
-	val enemy3 = new Enemy(2, 59, level1)
-	var player = new Player(2, 2, level1)
+	val enemy = new Enemy(58, 58, level1)
+	val enemy2 = new Enemy(59, 6, level1)
+	val enemy3 = new Enemy(6, 59, level1)
+	val enemy4 = new Enemy(43, 14, level1)
+	val enemy5 = new Enemy(30, 13, level1)
+	var player = new Player(3, 3, level1)
 	player.initialLocation()
 	//enemy.initialLocation()
 	level1 += player
 	level1 += enemy
 	level1 += enemy2
 	level1 += enemy3
+	level1 += enemy4
+	level1 += enemy5
 
 	stage = new JFXApp.PrimaryStage {
 		title = "Adventures of Sergio"

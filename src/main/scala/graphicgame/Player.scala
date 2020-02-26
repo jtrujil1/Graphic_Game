@@ -65,6 +65,16 @@ class Player (private var _x: Double, private var _y: Double, val level: Level) 
         }
     }
     def postCheck(): Unit = ???// You can delete this if you don't use it.
-    def stillHere(): Boolean = true// This is how you should remove entites from the level.
+    def stillHere(): Boolean = {
+        var ret = true
+        if(level.enemies.length > 0){
+            for(i <- 0 until level.enemies.length){
+                if(Entity.intersect(this, level.enemies(i))){
+                    ret = false
+                }
+            }
+        }
+        return ret
+    }
 
 }
