@@ -76,20 +76,12 @@ class Enemy (private var _x: Double, private var _y: Double, val level:Level) ex
         }
     }
 
-    def postCheck(): Unit = ???
-
     def stillHere(): Boolean = {
         var ret = true
         if(level.bullets.length > 0){
             for(i <- 0 until level.bullets.length){
                 if(Entity.intersect(this, level.bullets(i))){
                     ret = false
-                //     var newEnemy1 = new Enemy (util.Random.nextInt(10)*5 - 3, util.Random.nextInt(10)*5 - 3, level)
-                //     newEnemy1.initialLocation()
-                //     level += newEnemy1
-                //     var newEnemy2 = new Enemy (util.Random.nextInt(10)*5 - 3, util.Random.nextInt(10)*5 - 3, level)
-                //     newEnemy2.initialLocation()
-                //     level += newEnemy2
                 }
             }
         }

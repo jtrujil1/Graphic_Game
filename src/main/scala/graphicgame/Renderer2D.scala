@@ -18,7 +18,7 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
   private val playerImage = Renderer2D.loadImage("/images/player.png")
   private val enemyImage = Renderer2D.loadImage("/images/enemy.png")
   private val generatorImage = Renderer2D.loadImage("/images/generator.png")
-  private val bulletImage = Renderer2D.loadImage("/images/bullet2.png")
+  private val bulletImage = Renderer2D.loadImage("/images/bullet3.png")
 
   /**
    * These two methods are used to figure out where to draw things. They are used by the render.

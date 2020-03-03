@@ -3,8 +3,8 @@ package graphicgame
 class Bullet(private var _x: Double, private var _y: Double, val level: Level, val dir: String) extends Entity {
   def x: Double = _x
   def y: Double = _y
-  def height: Double = 0.6
-  def width: Double = 1
+  def height: Double = 0.3
+  def width: Double = 0.3
 
   def currentBullet = this
 
@@ -21,8 +21,7 @@ class Bullet(private var _x: Double, private var _y: Double, val level: Level, v
     if (moveAllowed(_x + dx, _y + dy)){ 
         _y += dy
         _x += dx
-    }
-    if(moveAllowed(_x + dx, _y + dy) == false){
+    }else{
       stopped = true
     }
   }
@@ -41,7 +40,7 @@ class Bullet(private var _x: Double, private var _y: Double, val level: Level, v
   def intersects(): Boolean = {
         for(i <- 0 until level.entities.length){
             if(Entity.intersect(this, level.entities(i)) && level.entities(i) != this && 
-              level.bullets.contains(level.entities(i))){
+              level.bullets.contains(level.entities(i)) != true && level.entities(i) != level.players(0)){
                 return true
             }
         }
@@ -55,8 +54,6 @@ class Bullet(private var _x: Double, private var _y: Double, val level: Level, v
     else
       true
   }
-
-  def postCheck(): Unit = ???
 
   def update(delay: Double): Unit = {
     move(delay, dir)

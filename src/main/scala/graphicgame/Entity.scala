@@ -9,7 +9,6 @@ trait Entity extends Serializable {
   def level: Level
   
   def update(delay: Double): Unit
-  def postCheck(): Unit // You can delete this if you don't use it.
   def stillHere(): Boolean // This is how you should remove entites from the level.
 }
 
