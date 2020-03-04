@@ -42,7 +42,6 @@ class Player (private var _x: Double, private var _y: Double, val level: Level) 
         return true
     }
 
-    var counter = 0.0
     var moveDelay = 0.0
     var moveInterval = 0.08
 
@@ -53,13 +52,9 @@ class Player (private var _x: Double, private var _y: Double, val level: Level) 
         if (keysHeld(KeyCode.Left)) move(-0.2, 0, moveAllowed(_x - 0.2, _y))
         if (keysHeld(KeyCode.Right)) move(0.2, 0, moveAllowed(_x + 0.2, _y))
         if (keysHeld(KeyCode.W)){
-            println(moveDelay)
-            println(moveInterval)
             if(moveDelay >= moveInterval){
                 var bullet = new Bullet(_x, _y - 1, level, "u")
                 level += bullet
-                println("Disparo")
-                // counter += 0.1
                 moveDelay = 0.0
             }
         }
@@ -67,7 +62,6 @@ class Player (private var _x: Double, private var _y: Double, val level: Level) 
             if(moveDelay >= moveInterval){
                 var bullet = new Bullet(_x - 0.5, _y, level, "l")
                 level += bullet
-                println("Disparo")
                 moveDelay = 0.0
             }
         }
@@ -75,7 +69,6 @@ class Player (private var _x: Double, private var _y: Double, val level: Level) 
             if(moveDelay >= moveInterval){
                 var bullet = new Bullet(_x, _y + 0.5, level, "d")
                 level += bullet
-                println("Disparo")
                 moveDelay = 0.0
             }
         }
@@ -83,7 +76,6 @@ class Player (private var _x: Double, private var _y: Double, val level: Level) 
             if(moveDelay >= moveInterval){
                 var bullet = new Bullet(_x + 0.5, _y, level, "r")
                 level += bullet
-                println("Disparo")
                 moveDelay = 0.0
             }
         }

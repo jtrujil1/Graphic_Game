@@ -58,15 +58,19 @@ class Enemy (private var _x: Double, private var _y: Double, val level:Level) ex
     }
 
     def update(delay: Double): Unit = {
-        var up = ShortestPath.breadthFirstShortestPath(_x, _y - 1, level.players(0).x, level.players(0).y, enemy)
-        var down = ShortestPath.breadthFirstShortestPath(_x, _y + 1, level.players(0).x, level.players(0).y, enemy)
-        var left = ShortestPath.breadthFirstShortestPath(_x - 1, _y, level.players(0).x, level.players(0).y, enemy)
-        var right = ShortestPath.breadthFirstShortestPath(_x + 1, _y, level.players(0).x, level.players(0).y, enemy)    
+        if(level.players.length > 0){
+            var up = ShortestPath.breadthFirstShortestPath(_x, _y - 1, level.players(0).x, level.players(0).y, enemy)
+            var down = ShortestPath.breadthFirstShortestPath(_x, _y + 1, level.players(0).x, level.players(0).y, enemy)
+            var left = ShortestPath.breadthFirstShortestPath(_x - 1, _y, level.players(0).x, level.players(0).y, enemy)
+            var right = ShortestPath.breadthFirstShortestPath(_x + 1, _y, level.players(0).x, level.players(0).y, enemy)    
 
-        if(up <= down && up <= left && up <= right) enemy.move("u")
-        if(left <= down && left <= up && left <= right) enemy.move("l")
-        if(right <= down && right <= left && right <= up) enemy.move("r")
-        if(down <= up && down <= left && down <= right) enemy.move("d")
+            if(up <= down && up <= left && up <= right) enemy.move("u")
+            if(left <= down && left <= up && left <= right) enemy.move("l")
+            if(right <= down && right <= left && right <= up) enemy.move("r")
+            if(down <= up && down <= left && down <= right) enemy.move("d")
+        }else{
+            enemy.move()
+        }
     }
 
     def initialLocation(): Unit = {

@@ -27,7 +27,7 @@ class Bullet(private var _x: Double, private var _y: Double, val level: Level, v
   }
 
   def moveAllowed(dx: Double, dy: Double): Boolean = {
-    level.maze.isClear(dx, dy, width, height, currentBullet) //&& intersects)
+    level.maze.isClear(dx, dy, width, height, currentBullet)
   }
 
   def initialLocation(): Unit = {
@@ -37,10 +37,12 @@ class Bullet(private var _x: Double, private var _y: Double, val level: Level, v
       }
   }
 
+
+
   def intersects(): Boolean = {
         for(i <- 0 until level.entities.length){
             if(Entity.intersect(this, level.entities(i)) && level.entities(i) != this && 
-              level.bullets.contains(level.entities(i)) != true && level.entities(i) != level.players(0)){
+              level.bullets.contains(level.entities(i)) != true &&  level.players.contains(level.entities(i)) != true){
                 return true
             }
         }
