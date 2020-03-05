@@ -5,8 +5,8 @@ class Enemy (private var _x: Double, private var _y: Double, val level:Level) ex
     private var dir: Int = 0
     def x: Double = _x
     def y: Double = _y
-    def width: Double = 1.5
-    def height: Double = 1.5
+    def width: Double = 1.3
+    def height: Double = 1.3
 
     def enemy = this
 
@@ -26,14 +26,15 @@ class Enemy (private var _x: Double, private var _y: Double, val level:Level) ex
         }
     }
 
-    def move(dir: String) = {
+    def move(dir: String, delay: Double) = {
+        var speed = 2
         var dx = 0.0
         var dy = 0.0
         dir match {
-        case "u" => dy = -0.1
-        case "d" => dy = 0.1
-        case "l" => dx = -0.1
-        case "r" => dx = 0.1
+        case "u" => dy = -speed*delay
+        case "d" => dy = speed*delay
+        case "l" => dx = -speed*delay
+        case "r" => dx = speed*delay
         }
 
         if (moveAllowed(dx, dy)){
@@ -64,20 +65,24 @@ class Enemy (private var _x: Double, private var _y: Double, val level:Level) ex
             var left = ShortestPath.breadthFirstShortestPath(_x - 1, _y, level.players(0).x, level.players(0).y, enemy)
             var right = ShortestPath.breadthFirstShortestPath(_x + 1, _y, level.players(0).x, level.players(0).y, enemy)    
 
-            if(up <= down && up <= left && up <= right) enemy.move("u")
-            if(left <= down && left <= up && left <= right) enemy.move("l")
-            if(right <= down && right <= left && right <= up) enemy.move("r")
-            if(down <= up && down <= left && down <= right) enemy.move("d")
+            if(up <= down && up <= left && up <= right) enemy.move("u", delay)
+            if(left <= down && left <= up && left <= right) enemy.move("l", delay)
+            if(right <= down && right <= left && right <= up) enemy.move("r", delay)
+            if(down <= up && down <= left && down <= right) enemy.move("d", delay)
         }else{
             enemy.move()
         }
     }
 
     def initialLocation(): Unit = {
-        while(!(moveAllowed(_x, _y))){
-            _x += 0.3
-            _y += 0.3
+        var dx = 0.3
+        var dy = 0.3
+        while(!(moveAllowed(dx, dy))){
+            dx += 0.3
+            dy += 0.3
         }
+        _x += dx
+        _y += dy
     }
 
     def stillHere(): Boolean = {
@@ -92,5 +97,4 @@ class Enemy (private var _x: Double, private var _y: Double, val level:Level) ex
         return ret
     }
         
-
 }

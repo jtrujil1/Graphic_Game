@@ -20,9 +20,8 @@ class Level(val maze: Maze, private var _entities: Seq[Entity]) {
     var newX = newPosition1._1
     var newY = newPosition1._2
 
-    println(newX, newY)
-
     var newEnemy1 = new Enemy(newX, newY, currentLevel)
+    newEnemy1.initialLocation()
     currentLevel += newEnemy1
     println("created enemy 1")
     println(newX, newY)
@@ -32,6 +31,7 @@ class Level(val maze: Maze, private var _entities: Seq[Entity]) {
     newY = newPosition1._2
 
     var newEnemy2 = new Enemy(newX, newY, currentLevel)
+    newEnemy2.initialLocation()
     currentLevel += newEnemy2
     println("created enemy 2")
     println(newX, newY)
@@ -41,20 +41,18 @@ class Level(val maze: Maze, private var _entities: Seq[Entity]) {
     var x = 0.0
     var y = 0.0
     if(players.length > 0){
-      while (!(currentLevel.maze.isClear(x, y, enemy.width, enemy.height, enemy)) && 
+      do{
+        x = (util.Random.nextInt(17) * 4 - 3).abs
+        y = (util.Random.nextInt(17) * 4 - 3).abs
+      }while (!(currentLevel.maze.isClear(x, y, enemy.width + 1, enemy.height + 1, enemy)) && 
             //math.sqrt(math.pow((newX - players(0).x), 2) + math.pow((newY - players(0).y), 2)) < 6 &&
-            ((newX - x).abs < 1 && (newY - y).abs < 1) &&
-            (x <= 0 && y <= 0)){
-        x = util.Random.nextInt(10) * 5 - 3
-        y = util.Random.nextInt(10) * 5 - 3
-      }
+            ((newX - x).abs < 1 && (newY - y).abs < 1))
     }else{
-      while (!(currentLevel.maze.isClear(x, y, enemy.width, enemy.height, enemy)) &&
-            ((newX - x).abs < 1 && (newY - y).abs < 1) &&
-            (x <= 0 && y <= 0)) {
-        x = util.Random.nextInt(10) * 5 - 3
-        y = util.Random.nextInt(10) * 5 - 3
-      }
+      do{
+        x = (util.Random.nextInt(17) * 4 - 3).abs
+        y = (util.Random.nextInt(17) * 4 - 3).abs
+      }while (!(currentLevel.maze.isClear(x, y, enemy.width + 1, enemy.height +1, enemy)) &&
+            ((newX - x).abs < 1 && (newY - y).abs < 1))
     }
 
     (x, y)

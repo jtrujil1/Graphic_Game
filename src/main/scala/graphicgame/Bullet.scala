@@ -37,8 +37,6 @@ class Bullet(private var _x: Double, private var _y: Double, val level: Level, v
       }
   }
 
-
-
   def intersects(): Boolean = {
         for(i <- 0 until level.entities.length){
             if(Entity.intersect(this, level.entities(i)) && level.entities(i) != this && 
