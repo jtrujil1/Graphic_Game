@@ -7,6 +7,7 @@ class Enemy (private var _x: Double, private var _y: Double, val level:Level) ex
     def y: Double = _y
     def width: Double = 1.3
     def height: Double = 1.3
+    val speed = 5
 
     def enemy = this
 
@@ -26,8 +27,7 @@ class Enemy (private var _x: Double, private var _y: Double, val level:Level) ex
         }
     }
 
-    def move(dir: String, delay: Double) = {
-        var speed = 2
+    def move(dir: String, delay: Double, ignore: Boolean = false) = {
         var dx = 0.0
         var dy = 0.0
         dir match {
@@ -37,9 +37,16 @@ class Enemy (private var _x: Double, private var _y: Double, val level:Level) ex
         case "r" => dx = speed*delay
         }
 
-        if (moveAllowed(dx, dy)){
+        if (moveAllowed(dx, dy) || ignore){
             _y += dy
             _x += dx
+        }
+    }
+
+    def move(newX: Double, newY: Double, delay: Double) = {
+        if(moveAllowed(newX, newY)){
+            _x += newX
+            _y += newY
         }
     }
 
@@ -60,18 +67,27 @@ class Enemy (private var _x: Double, private var _y: Double, val level:Level) ex
 
     def update(delay: Double): Unit = {
         if(level.players.length > 0){
-            var up = ShortestPath.breadthFirstShortestPath(_x, _y - 1, level.players(0).x, level.players(0).y, enemy)
-            var down = ShortestPath.breadthFirstShortestPath(_x, _y + 1, level.players(0).x, level.players(0).y, enemy)
-            var left = ShortestPath.breadthFirstShortestPath(_x - 1, _y, level.players(0).x, level.players(0).y, enemy)
-            var right = ShortestPath.breadthFirstShortestPath(_x + 1, _y, level.players(0).x, level.players(0).y, enemy)    
+            var dx = level.players(0).x - _x
+            var dy = level.players(0).y - _y
+            var distance = math.sqrt(dx * dx + dy * dy)
 
-            if(up <= down && up <= left && up <= right) enemy.move("u", delay)
-            if(left <= down && left <= up && left <= right) enemy.move("l", delay)
-            if(right <= down && right <= left && right <= up) enemy.move("r", delay)
-            if(down <= up && down <= left && down <= right) enemy.move("d", delay)
+            if(distance < 2.5){
+                enemy.move(dx/distance*speed*delay, dy/distance*speed*delay, delay)
+            }else{
+                var up = ShortestPath.breadthFirstShortestPath(_x, _y - 1, level.players(0).x, level.players(0).y, enemy)
+                var down = ShortestPath.breadthFirstShortestPath(_x, _y + 1, level.players(0).x, level.players(0).y, enemy)
+                var left = ShortestPath.breadthFirstShortestPath(_x - 1, _y, level.players(0).x, level.players(0).y, enemy)
+                var right = ShortestPath.breadthFirstShortestPath(_x + 1, _y, level.players(0).x, level.players(0).y, enemy)    
+
+                if(up <= down && up <= left && up <= right) enemy.move("u", delay)
+                if(left <= down && left <= up && left <= right) enemy.move("l", delay)
+                if(right <= down && right <= left && right <= up) enemy.move("r", delay)
+                if(down <= up && down <= left && down <= right) enemy.move("d", delay)
+            }
         }else{
             enemy.move()
         }
+
     }
 
     def initialLocation(): Unit = {

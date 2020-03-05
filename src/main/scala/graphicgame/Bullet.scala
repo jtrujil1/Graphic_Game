@@ -9,13 +9,14 @@ class Bullet(private var _x: Double, private var _y: Double, val level: Level, v
   def currentBullet = this
 
   def move(delay: Double, dir: String) = {
+    var speed = 9
     var dx = 0.0
     var dy = 0.0
     dir match {
-      case "u" => dy = -0.2
-      case "d" => dy = 0.2
-      case "l" => dx = -0.2
-      case "r" => dx = 0.2
+      case "u" => dy = -speed*delay
+      case "d" => dy = speed*delay
+      case "l" => dx = -speed*delay
+      case "r" => dx = speed*delay
     }
 
     if (moveAllowed(_x + dx, _y + dy)){ 

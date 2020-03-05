@@ -22,14 +22,10 @@ class Player (private var _x: Double, private var _y: Double, val level: Level) 
     def keyPressed(keyCode: KeyCode): Unit = keysHeld += keyCode
     def keyReleased(keyCode: KeyCode): Unit = keysHeld -= keyCode
 
-    
-    var speedDelay = 0.0
-
-    def move(dx: Double, dy: Double, moveAllowed: Boolean, delay: Double): Unit = {
+    def move(dx: Double, dy: Double, moveAllowed: Boolean): Unit = {
         if(moveAllowed){
             _x += dx
             _y += dy
-            speedDelay = 0.0
         }
     }
 
@@ -52,10 +48,10 @@ class Player (private var _x: Double, private var _y: Double, val level: Level) 
     def update(delay: Double): Unit = {
         var speed = 8
         moveDelay += delay
-        if (keysHeld(KeyCode.Up)) move(0, -speed*delay, moveAllowed(_x, _y - speed*delay), delay)
-        if (keysHeld(KeyCode.Down)) move(0, speed*delay, moveAllowed(_x, _y + speed*delay), delay)
-        if (keysHeld(KeyCode.Left)) move(-speed*delay, 0, moveAllowed(_x - speed*delay, _y), delay)
-        if (keysHeld(KeyCode.Right)) move(speed*delay, 0, moveAllowed(_x + speed*delay, _y), delay)
+        if (keysHeld(KeyCode.Up)) move(0, -speed*delay, moveAllowed(_x, _y - speed*delay))
+        if (keysHeld(KeyCode.Down)) move(0, speed*delay, moveAllowed(_x, _y + speed*delay))
+        if (keysHeld(KeyCode.Left)) move(-speed*delay, 0, moveAllowed(_x - speed*delay, _y))
+        if (keysHeld(KeyCode.Right)) move(speed*delay, 0, moveAllowed(_x + speed*delay, _y))
         if (keysHeld(KeyCode.W)){
             if(moveDelay >= moveInterval){
                 var bullet = new Bullet(_x, _y - 1, level, "u")
