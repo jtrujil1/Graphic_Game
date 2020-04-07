@@ -44,15 +44,16 @@ object Main extends JFXApp {
 		scene = new Scene(1000, 800) {
 			content = canvas
 
-			onKeyPressed = (ke: KeyEvent) => player.keyPressed(ke.code)
-      		onKeyReleased = (ke: KeyEvent) => player.keyReleased(ke.code)
+			onKeyPressed = (ke: KeyEvent) => player.keyPressed(KeyData.codeToInt(ke.code))
+      		onKeyReleased = (ke: KeyEvent) => player.keyReleased(KeyData.codeToInt(ke.code))
 
 			var lastTime = -1L
       		val timer = AnimationTimer(time => {
         		if (lastTime >= 0) {
           			val delay = (time - lastTime)/1e9
 					level1.updateAll(delay)
-					renderer.render(level1, player.x, player.y)
+					val pl = level1.buildPassable
+					renderer.render(pl, player.x, player.y)
         		}
         		lastTime = time
       		})

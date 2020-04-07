@@ -11,14 +11,16 @@ class Enemy (private var _x: Double, private var _y: Double, val level:Level) ex
 
     def enemy = this
 
-    def move():Unit = {
+    def move(delay: Double):Unit = {
+        var speedUp = 1.0
+        if(delay < 0.00005) speedUp = 20
         var dx:Double = 0
         var dy:Double = 0
         var n = util.Random.nextInt(4) match {
-            case 0 => dy += 0.3 //Up
-            case 1 => dy -= 0.3 //Down
-            case 2 => dx -= 0.3 //Left
-            case 3 => dx += 0.3 //Right
+            case 0 => dy += speed*delay*speedUp //Up
+            case 1 => dy -= speed*delay*speedUp //Down
+            case 2 => dx -= speed*delay*speedUp //Left
+            case 3 => dx += speed*delay*speedUp //Right
         }
 
         if(moveAllowed(dx, dy)){
@@ -67,17 +69,18 @@ class Enemy (private var _x: Double, private var _y: Double, val level:Level) ex
 
     def update(delay: Double): Unit = {
         if(level.players.length > 0){
-            var dx = level.players(0).x - _x
-            var dy = level.players(0).y - _y
+            var cp = findClosestPlayer(x, y)
+            var dx = cp.x - _x
+            var dy = cp.y - _y
             var distance = math.sqrt(dx * dx + dy * dy)
 
             if(distance < 2.5){
                 enemy.move(dx/distance*speed*delay, dy/distance*speed*delay, delay)
             }else{
-                var up = ShortestPath.breadthFirstShortestPath(_x, _y - 1, level.players(0).x, level.players(0).y, enemy)
-                var down = ShortestPath.breadthFirstShortestPath(_x, _y + 1, level.players(0).x, level.players(0).y, enemy)
-                var left = ShortestPath.breadthFirstShortestPath(_x - 1, _y, level.players(0).x, level.players(0).y, enemy)
-                var right = ShortestPath.breadthFirstShortestPath(_x + 1, _y, level.players(0).x, level.players(0).y, enemy)    
+                var up = ShortestPath.breadthFirstShortestPath(_x, _y - 1, cp.x, cp.y, enemy)
+                var down = ShortestPath.breadthFirstShortestPath(_x, _y + 1, cp.x, cp.y, enemy)
+                var left = ShortestPath.breadthFirstShortestPath(_x - 1, _y, cp.x, cp.y, enemy)
+                var right = ShortestPath.breadthFirstShortestPath(_x + 1, _y, cp.x, cp.y, enemy)    
 
                 if(up <= down && up <= left && up <= right) enemy.move("u", delay)
                 if(left <= down && left <= up && left <= right) enemy.move("l", delay)
@@ -85,7 +88,9 @@ class Enemy (private var _x: Double, private var _y: Double, val level:Level) ex
                 if(down <= up && down <= left && down <= right) enemy.move("d", delay)
             }
         }else{
-            enemy.move()
+            // println("delay:" + delay)
+            // if(delay >= 1/25000.0) 
+            enemy.move(delay)
         }
 
     }
@@ -112,5 +117,22 @@ class Enemy (private var _x: Double, private var _y: Double, val level:Level) ex
         }
         return ret
     }
+
+    def findClosestPlayer(ex: Double, ey: Double): Player = {
+        var closestPlayer: Player = null
+        var minDistance = 300.0
+        for(i <- 0 until level.players.length){
+            var dx = level.players(i).x - _x
+            var dy = level.players(i).y - _y
+            var distance = math.sqrt(dx * dx + dy * dy)
+            if(distance < minDistance){
+                minDistance = distance
+                closestPlayer = level.players(i)
+            }
+        }
+        closestPlayer
+    }
+
+    def buildPassable = PassableEntity(801, _x, _y, width, height)
         
 }

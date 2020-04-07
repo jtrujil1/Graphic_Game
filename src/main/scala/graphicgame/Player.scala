@@ -17,10 +17,10 @@ class Player (private var _x: Double, private var _y: Double, val level: Level) 
         }
     }
 
-    private var keysHeld = Set[KeyCode]()
+    private var keysHeld = Set[Int]()
 
-    def keyPressed(keyCode: KeyCode): Unit = keysHeld += keyCode
-    def keyReleased(keyCode: KeyCode): Unit = keysHeld -= keyCode
+    def keyPressed(keyCode: Int): Unit = keysHeld += keyCode
+    def keyReleased(keyCode: Int): Unit = keysHeld -= keyCode
 
     def move(dx: Double, dy: Double, moveAllowed: Boolean): Unit = {
         if(moveAllowed){
@@ -46,34 +46,34 @@ class Player (private var _x: Double, private var _y: Double, val level: Level) 
     var moveInterval = 0.08
 
     def update(delay: Double): Unit = {
-        var speed = 8
+        var speed = 9
         moveDelay += delay
-        if (keysHeld(KeyCode.Up)) move(0, -speed*delay, moveAllowed(_x, _y - speed*delay))
-        if (keysHeld(KeyCode.Down)) move(0, speed*delay, moveAllowed(_x, _y + speed*delay))
-        if (keysHeld(KeyCode.Left)) move(-speed*delay, 0, moveAllowed(_x - speed*delay, _y))
-        if (keysHeld(KeyCode.Right)) move(speed*delay, 0, moveAllowed(_x + speed*delay, _y))
-        if (keysHeld(KeyCode.W)){
+        if (keysHeld(KeyData.Up)) move(0, -speed*delay, moveAllowed(_x, _y - speed*delay))
+        if (keysHeld(KeyData.Down)) move(0, speed*delay, moveAllowed(_x, _y + speed*delay))
+        if (keysHeld(KeyData.Left)) move(-speed*delay, 0, moveAllowed(_x - speed*delay, _y))
+        if (keysHeld(KeyData.Right)) move(speed*delay, 0, moveAllowed(_x + speed*delay, _y))
+        if (keysHeld(KeyData.W)){
             if(moveDelay >= moveInterval){
                 var bullet = new Bullet(_x, _y - 1, level, "u")
                 level += bullet
                 moveDelay = 0.0
             }
         }
-        if (keysHeld(KeyCode.A)){
+        if (keysHeld(KeyData.A)){
             if(moveDelay >= moveInterval){
                 var bullet = new Bullet(_x - 0.5, _y, level, "l")
                 level += bullet
                 moveDelay = 0.0
             }
         }
-        if (keysHeld(KeyCode.S)){
+        if (keysHeld(KeyData.S)){
             if(moveDelay >= moveInterval){
                 var bullet = new Bullet(_x, _y + 0.5, level, "d")
                 level += bullet
                 moveDelay = 0.0
             }
         }
-        if (keysHeld(KeyCode.D)){
+        if (keysHeld(KeyData.D)){
             if(moveDelay >= moveInterval){
                 var bullet = new Bullet(_x + 0.5, _y, level, "r")
                 level += bullet
@@ -93,5 +93,7 @@ class Player (private var _x: Double, private var _y: Double, val level: Level) 
         }
         return ret
     }
+
+    def buildPassable = PassableEntity(800, _x, _y, width, height)
 
 }

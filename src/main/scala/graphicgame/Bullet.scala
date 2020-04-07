@@ -59,4 +59,6 @@ class Bullet(private var _x: Double, private var _y: Double, val level: Level, v
   def update(delay: Double): Unit = {
     move(delay, dir)
   }
+
+  def buildPassable = PassableEntity(802, _x, _y, width, height)
 }

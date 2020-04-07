@@ -15,14 +15,13 @@ class Level(val maze: Maze, private var _entities: Seq[Entity]) {
 
   def +=(e: Entity): Unit = _entities +:= e
 
-  def spawnEnemies(enemy: Enemy) {
+  def spawnEnemies(enemy: Enemy): (Enemy, Enemy) = {
     var newPosition1 = findNewLoc(enemy)
     var newX = newPosition1._1
     var newY = newPosition1._2
 
     var newEnemy1 = new Enemy(newX, newY, currentLevel)
     newEnemy1.initialLocation()
-    currentLevel += newEnemy1
 
     var newPosition2 = findNewLoc(enemy, newX, newY)
     newX = newPosition1._1
@@ -30,7 +29,8 @@ class Level(val maze: Maze, private var _entities: Seq[Entity]) {
 
     var newEnemy2 = new Enemy(newX, newY, currentLevel)
     newEnemy2.initialLocation()
-    currentLevel += newEnemy2
+
+    (newEnemy1,newEnemy2)
   }
 
   def findNewLoc(enemy: Enemy, newX:Double = 0.0, newY:Double = 0.0): (Double, Double) = {
@@ -57,21 +57,29 @@ class Level(val maze: Maze, private var _entities: Seq[Entity]) {
     (x, y)
   }
 
-  var count = 0
-
   def updateAll(delay: Double): Unit = {
-    
+    var newEnemies = Seq[Enemy]()
     for(i <- 0 until enemies.length){
         if(enemies(i).stillHere == false && enemies.length < 18){
-            spawnEnemies(enemies(i))
-            count += 1
+          var newEnem = spawnEnemies(enemies(i))
+          newEnemies +:= newEnem._1
+          newEnemies +:= newEnem._2
         }
     }
+
+    for(i <- 0 until newEnemies.length) currentLevel += newEnemies(i)
 
     _entities = _entities.filter(_.stillHere)
     for (i <- 0 until _entities.length) {
       _entities(i).update(delay)
     }
+  }
+
+  def buildPassable: PassableLevel = {
+    val entities = for (entity <- _entities) yield {
+      entity.buildPassable
+    }
+    PassableLevel(maze, entities)
   }
  
 }
