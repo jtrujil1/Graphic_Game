@@ -18,21 +18,27 @@ object Server extends App {
 
     val maze = RandomMaze(4, false, 20, 20, 0.6)
 	var level = new Level(maze, Nil)
-	val enemy = new Enemy(58, 58, level)
-	val enemy2 = new Enemy(59, 8, level)
-	val enemy3 = new Enemy(7, 59, level)
-	val enemy4 = new Enemy(43, 13, level)
-	val enemy5 = new Enemy(30, 13, level)
-	enemy.initialLocation()
-	enemy2.initialLocation()
-	enemy3.initialLocation()
-	enemy4.initialLocation()
-	enemy5.initialLocation()
-	level += enemy
-	level += enemy2
-	level += enemy3
-	level += enemy4
-	level += enemy5
+	val ghost = new Ghost(58, 58, level)
+	val ghost2 = new Ghost(59, 8, level)
+	val ghost3 = new Ghost(7, 59, level)
+	val ghost4 = new Ghost(43, 13, level)
+    val demon = new Demon(29, 50, level)
+    val demon2 = new Demon(50, 21, level)
+    val demon3 = new Demon(30, 13, level)
+	ghost.initialLocation()
+	ghost2.initialLocation()
+	ghost3.initialLocation()
+	ghost4.initialLocation()
+    demon.initialLocation()
+    demon2.initialLocation()
+    demon3.initialLocation()
+	level += ghost
+	level += ghost2
+	level += ghost3
+	level += ghost4
+    level += demon
+    level += demon2
+    level += demon3
 
     val ss = new ServerSocket(8000)
     Future {

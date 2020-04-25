@@ -61,21 +61,21 @@ class Player (private var _x: Double, private var _y: Double, val level: Level) 
         }
         if (keysHeld(KeyData.A)){
             if(moveDelay >= moveInterval){
-                var bullet = new Bullet(_x - 0.5, _y, level, "l")
+                var bullet = new Bullet(_x - 1, _y, level, "l")
                 level += bullet
                 moveDelay = 0.0
             }
         }
         if (keysHeld(KeyData.S)){
             if(moveDelay >= moveInterval){
-                var bullet = new Bullet(_x, _y + 0.5, level, "d")
+                var bullet = new Bullet(_x, _y + 1, level, "d")
                 level += bullet
                 moveDelay = 0.0
             }
         }
         if (keysHeld(KeyData.D)){
             if(moveDelay >= moveInterval){
-                var bullet = new Bullet(_x + 0.5, _y, level, "r")
+                var bullet = new Bullet(_x + 1, _y, level, "r")
                 level += bullet
                 moveDelay = 0.0
             }
@@ -84,9 +84,17 @@ class Player (private var _x: Double, private var _y: Double, val level: Level) 
 
     def stillHere(): Boolean = {
         var ret = true
-        if(level.enemies.length > 0){
-            for(i <- 0 until level.enemies.length){
-                if(Entity.intersect(this, level.enemies(i))){
+        if(level.ghosts.length > 0){
+            for(i <- 0 until level.ghosts.length){
+                if(Entity.intersect(this, level.ghosts(i))){
+                    ret = false
+                }
+            }
+        }
+
+        if(level.fire.length > 0){
+            for(i <- 0 until level.fire.length){
+                if(Entity.intersect(this, level.fire(i))){
                     ret = false
                 }
             }

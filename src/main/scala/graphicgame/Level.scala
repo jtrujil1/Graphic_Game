@@ -7,44 +7,54 @@ class Level(val maze: Maze, private var _entities: Seq[Entity]) {
     _entities
   }
 
-  def enemies = entities.collect { case e: Enemy => e }
+  def ghosts = entities.collect { case e: Ghost => e }
+
+  def demons = entities.collect { case d: Demon => d }
 
   def bullets = entities.collect { case b: Bullet => b }
 
   def players = entities.collect { case p: Player => p }
 
+  def fire = entities.collect { case f: DemonFire => f}
+
   def +=(e: Entity): Unit = _entities +:= e
 
-  def spawnEnemies(enemy: Enemy): (Enemy, Enemy) = {
+  def spawnEnemies(enemy: Entity, t: String): (Entity, Entity) = {
     var newPosition1 = findNewLoc(enemy)
     var newX = newPosition1._1
     var newY = newPosition1._2
-
-    var newEnemy1 = new Enemy(newX, newY, currentLevel)
-    newEnemy1.initialLocation()
-
+    
     var newPosition2 = findNewLoc(enemy, newX, newY)
     newX = newPosition1._1
     newY = newPosition1._2
 
-    var newEnemy2 = new Enemy(newX, newY, currentLevel)
-    newEnemy2.initialLocation()
-
-    (newEnemy1,newEnemy2)
+    if(t == "g"){
+      var newGhost1 = new Ghost(newX, newY, currentLevel)
+      newGhost1.initialLocation()
+      var newGhost2 = new Ghost(newX, newY, currentLevel)
+      newGhost2.initialLocation()
+      (newGhost1,newGhost2)
+    }else{
+      var newDemon1 = new Demon(newX, newY, currentLevel)
+      newDemon1.initialLocation()
+      var newDemon2 = new Demon(newX, newY, currentLevel)
+      newDemon2.initialLocation()
+      (newDemon1,newDemon2)
+    }
   }
 
-  def findNewLoc(enemy: Enemy, newX:Double = 0.0, newY:Double = 0.0): (Double, Double) = {
+  def findNewLoc(enemy: Entity, newX:Double = 0.0, newY:Double = 0.0): (Double, Double) = {
     var x = 0.0
     var y = 0.0
     if(players.length > 0){
-      var dx = players(0).x - enemy.x
-      var dy = players(0).y - enemy.y
-      var distance = math.sqrt(dx * dx + dy * dy)
+      // var dx = players(0).x - enemy.x
+      // var dy = players(0).y - enemy.y
+      // var distance = math.sqrt(dx * dx + dy * dy)
       do{
         x = (util.Random.nextInt(17) * 4 - 3).abs
         y = (util.Random.nextInt(17) * 4 - 3).abs
       }while (!(currentLevel.maze.isClear(x, y, enemy.width + 1, enemy.height + 1, enemy)) && 
-            distance < 20 &&
+            findClosestPlayers(x, y) &&
             ((newX - x).abs < 1 && (newY - y).abs < 1))
     }else{
       do{
@@ -57,17 +67,38 @@ class Level(val maze: Maze, private var _entities: Seq[Entity]) {
     (x, y)
   }
 
+  def findClosestPlayers(ex: Double, ey: Double): Boolean = {
+    var ret = false
+    for(i <- 0 until players.length){
+      var dx = players(i).x - ex
+      var dy = players(i).y - ey
+      var distance = math.sqrt(dx * dx + dy * dy)
+      if(distance < 30){
+        ret = true
+      }
+    }
+    ret
+  }
+
   def updateAll(delay: Double): Unit = {
-    var newEnemies = Seq[Enemy]()
-    for(i <- 0 until enemies.length){
-        if(enemies(i).stillHere == false && enemies.length < 18){
-          var newEnem = spawnEnemies(enemies(i))
-          newEnemies +:= newEnem._1
-          newEnemies +:= newEnem._2
+    var newGhosts = Seq[Entity]()
+    var newDemons = Seq[Entity]()
+    for(i <- 0 until ghosts.length){
+        if(ghosts(i).stillHere == false && ghosts.length < 18){
+          var newEnem = spawnEnemies(ghosts(i), "g")
+          newGhosts +:= newEnem._1
+          newGhosts +:= newEnem._2
         }
     }
+    for(i <- 0 until newGhosts.length) currentLevel += newGhosts(i)
 
-    for(i <- 0 until newEnemies.length) currentLevel += newEnemies(i)
+    if(demons.filter(_.stillHere).length < 2){
+      var tempDemon = new Demon(50, 21, currentLevel)
+      var newEnem = spawnEnemies(tempDemon, "d")
+      newDemons +:= newEnem._1
+      newDemons +:= newEnem._2
+    }
+    for(i <- 0 until newDemons.length) currentLevel += newDemons(i)
 
     _entities = _entities.filter(_.stillHere)
     for (i <- 0 until _entities.length) {

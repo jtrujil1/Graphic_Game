@@ -16,9 +16,10 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
   private val floorImage = Renderer2D.loadImage("/images/floor.png")
   private val wallImage = Renderer2D.loadImage("/images/stonewall2.png")
   private val playerImage = Renderer2D.loadImage("/images/player.png")
-  private val enemyImage = Renderer2D.loadImage("/images/enemy.png")
-  private val generatorImage = Renderer2D.loadImage("/images/generator.png")
+  private val ghostImage = Renderer2D.loadImage("/images/enemy.png")
+  private val demonImage = Renderer2D.loadImage("/images/demon.png")
   private val bulletImage = Renderer2D.loadImage("/images/bullet3.png")
+  private val fireImage = Renderer2D.loadImage("/images/fire.png")
 
   /**
    * These two methods are used to figure out where to draw things. They are used by the render.
@@ -58,9 +59,10 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
    for (e <- level.entities) {
      val img = e.style match {
        case 800 => playerImage
-       case 801 => enemyImage
+       case 801 => ghostImage
        case 802 => bulletImage
-       //case g: Generator => generatorImage
+       case 803 => demonImage
+       case 804 => fireImage
      }
      if(level.maze.wrap) {
        for(rx <- -1 to 1; ry <- -1 to 1)

@@ -20,24 +20,30 @@ object Main extends JFXApp {
 	val renderer = new Renderer2D(gc, 30)
 	val maze = RandomMaze(4, false, 20, 20, 0.6)
 	var level1 = new Level(maze, Nil)
-	val enemy = new Enemy(58, 58, level1)
-	val enemy2 = new Enemy(59, 8, level1)
-	val enemy3 = new Enemy(7, 59, level1)
-	val enemy4 = new Enemy(43, 13, level1)
-	val enemy5 = new Enemy(30, 13, level1)
+	val ghost = new Ghost(58, 58, level1)
+	val ghost2 = new Ghost(59, 8, level1)
+	val ghost3 = new Ghost(7, 59, level1)
+	val ghost4 = new Ghost(43, 13, level1)
+	val ghost5 = new Ghost(30, 13, level1)
 	var player = new Player(3, 3, level1)
+	val demon = new Demon(29, 50, level1)
+	val demon2 = new Demon(50, 21, level1)
 	player.initialLocation()
-	enemy.initialLocation()
-	enemy2.initialLocation()
-	enemy3.initialLocation()
-	enemy4.initialLocation()
-	enemy5.initialLocation()
+	ghost.initialLocation()
+	ghost2.initialLocation()
+	ghost3.initialLocation()
+	ghost4.initialLocation()
+	ghost5.initialLocation()
+	demon.initialLocation()
+	demon2.initialLocation()
 	level1 += player
-	level1 += enemy
-	level1 += enemy2
-	level1 += enemy3
-	level1 += enemy4
-	level1 += enemy5
+	level1 += ghost
+	level1 += ghost2
+	level1 += ghost3
+	level1 += ghost4
+	level1 += ghost5
+	level1 += demon
+	level1 += demon2
 
 	stage = new JFXApp.PrimaryStage {
 		title = "Adventures of Sergio"

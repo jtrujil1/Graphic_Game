@@ -1,13 +1,13 @@
 package graphicgame
 
-class Enemy (private var _x: Double, private var _y: Double, val level:Level) extends Entity {
+class Ghost (private var _x: Double, private var _y: Double, val level:Level) extends Entity {
     private var dead: Boolean = false
     private var dir: Int = 0
     def x: Double = _x
     def y: Double = _y
     def width: Double = 1.3
     def height: Double = 1.3
-    val speed = 5
+    val speed = 4.5
 
     def enemy = this
 
