@@ -1,15 +1,15 @@
 package graphicgame
 
-class Bullet(private var _x: Double, private var _y: Double, val level: Level, val dir: String) extends Entity {
+class Bullet(private var _x: Double, private var _y: Double, val level: Level, val dir: String, val shooter: Player) extends Entity {
   def x: Double = _x
   def y: Double = _y
-  def height: Double = 0.3
-  def width: Double = 0.3
+  def height: Double = 0.25
+  def width: Double = 0.25
 
   def currentBullet = this
 
   def move(delay: Double, dir: String) = {
-    var speed = 9
+    var speed = 10
     var dx = 0.0
     var dy = 0.0
     dir match {
@@ -40,8 +40,8 @@ class Bullet(private var _x: Double, private var _y: Double, val level: Level, v
 
   def intersects(): Boolean = {
         for(i <- 0 until level.entities.length){
-            if(Entity.intersect(this, level.entities(i)) && level.entities(i) != this && 
-              level.bullets.contains(level.entities(i)) != true &&  level.players.contains(level.entities(i)) != true){
+            if(Entity.intersect(this, level.entities(i)) && (level.ghosts.contains(level.entities(i)) ||
+              level.demons.contains(level.entities(i)))){
                 return true
             }
         }

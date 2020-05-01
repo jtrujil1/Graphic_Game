@@ -5,7 +5,7 @@ class Demon (private var _x: Double, private var _y: Double, val level:Level) ex
     private var dir: Int = 0
     def x: Double = _x
     def y: Double = _y
-    def width: Double = 1
+    def width: Double = 1.3
     def height: Double = 1.3
     val speed = 4
     private var direction = "u"
@@ -32,13 +32,6 @@ class Demon (private var _x: Double, private var _y: Double, val level:Level) ex
         }else canMove = false
     }
 
-    // def move(newX: Double, newY: Double, delay: Double) = {
-    //     if(moveAllowed(newX, newY)){
-    //         _x += newX
-    //         _y += newY
-    //     }
-    // }
-
     def moveAllowed(dx: Double, dy: Double): Boolean = {
         level.maze.isClear(_x + dx, _y + dy, width, height, enemy)
     }
@@ -55,11 +48,11 @@ class Demon (private var _x: Double, private var _y: Double, val level:Level) ex
     }
 
     def update(delay: Double): Unit = {
-        enemy.move(direction, delay)
-        if(!canMove){
-            direction = directionsArr(util.Random.nextInt(4))
-        }
         if(level.players.length > 0){
+            enemy.move(direction, delay)
+            if(!canMove){
+                direction = directionsArr(util.Random.nextInt(4))
+            }
             if(count%11 == 0){
                 if(count%10 == 4){
                     var fire1 = new DemonFire(_x, _y - 1, level, "u")
@@ -90,30 +83,18 @@ class Demon (private var _x: Double, private var _y: Double, val level:Level) ex
 
     def stillHere(): Boolean = {
         var ret = true
+        var player: Player = null
         if(level.bullets.length > 0){
             for(i <- 0 until level.bullets.length){
                 if(Entity.intersect(this, level.bullets(i))){
                     ret = false
+                    if(player == null) player = level.bullets(i).shooter
                 }
             }
         }
+        if(player != null) player.score += 200
         return ret
     }
-
-    // def findClosestPlayer(ex: Double, ey: Double): Player = {
-    //     var closestPlayer: Player = null
-    //     var minDistance = 300.0
-    //     for(i <- 0 until level.players.length){
-    //         var dx = level.players(i).x - _x
-    //         var dy = level.players(i).y - _y
-    //         var distance = math.sqrt(dx * dx + dy * dy)
-    //         if(distance < minDistance){
-    //             minDistance = distance
-    //             closestPlayer = level.players(i)
-    //         }
-    //     }
-    //     closestPlayer
-    // }
 
     def buildPassable = PassableEntity(803, _x, _y, width, height)
         

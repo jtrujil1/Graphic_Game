@@ -1,5 +1,10 @@
 package graphicgame
 
+import scala.concurrent.Future
+import scala.concurrent.Await
+import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class Level(val maze: Maze, private var _entities: Seq[Entity]) {
   val currentLevel = this
 
@@ -20,24 +25,32 @@ class Level(val maze: Maze, private var _entities: Seq[Entity]) {
   def +=(e: Entity): Unit = _entities +:= e
 
   def spawnEnemies(enemy: Entity, t: String): (Entity, Entity) = {
-    var newPosition1 = findNewLoc(enemy)
-    var newX = newPosition1._1
-    var newY = newPosition1._2
+    var newX, newY, newX2, newY2 = 0.0
+    val f1 = Future{
+      var newPosition1 = findNewLoc(enemy)
+      newX = newPosition1._1
+      newY = newPosition1._2
+    }
     
-    var newPosition2 = findNewLoc(enemy, newX, newY)
-    newX = newPosition1._1
-    newY = newPosition1._2
+    val f2 = Future{
+      var newPosition2 = findNewLoc(enemy, newX, newY)
+      newX2 = newPosition2._1
+      newY2 = newPosition2._2
+    }
+
+    Await.result(f1, 3.seconds)
+    Await.result(f2, 3.seconds)
 
     if(t == "g"){
       var newGhost1 = new Ghost(newX, newY, currentLevel)
       newGhost1.initialLocation()
-      var newGhost2 = new Ghost(newX, newY, currentLevel)
+      var newGhost2 = new Ghost(newX2, newY2, currentLevel)
       newGhost2.initialLocation()
       (newGhost1,newGhost2)
     }else{
       var newDemon1 = new Demon(newX, newY, currentLevel)
       newDemon1.initialLocation()
-      var newDemon2 = new Demon(newX, newY, currentLevel)
+      var newDemon2 = new Demon(newX2, newY2, currentLevel)
       newDemon2.initialLocation()
       (newDemon1,newDemon2)
     }
@@ -47,9 +60,6 @@ class Level(val maze: Maze, private var _entities: Seq[Entity]) {
     var x = 0.0
     var y = 0.0
     if(players.length > 0){
-      // var dx = players(0).x - enemy.x
-      // var dy = players(0).y - enemy.y
-      // var distance = math.sqrt(dx * dx + dy * dy)
       do{
         x = (util.Random.nextInt(17) * 4 - 3).abs
         y = (util.Random.nextInt(17) * 4 - 3).abs
@@ -73,7 +83,7 @@ class Level(val maze: Maze, private var _entities: Seq[Entity]) {
       var dx = players(i).x - ex
       var dy = players(i).y - ey
       var distance = math.sqrt(dx * dx + dy * dy)
-      if(distance < 30){
+      if(distance < 60){
         ret = true
       }
     }
@@ -81,24 +91,29 @@ class Level(val maze: Maze, private var _entities: Seq[Entity]) {
   }
 
   def updateAll(delay: Double): Unit = {
-    var newGhosts = Seq[Entity]()
-    var newDemons = Seq[Entity]()
-    for(i <- 0 until ghosts.length){
-        if(ghosts(i).stillHere == false && ghosts.length < 18){
-          var newEnem = spawnEnemies(ghosts(i), "g")
-          newGhosts +:= newEnem._1
-          newGhosts +:= newEnem._2
-        }
-    }
-    for(i <- 0 until newGhosts.length) currentLevel += newGhosts(i)
+      var newGhosts = Seq[Entity]()
+      for(i <- 0 until ghosts.length){
+          if(ghosts(i).stillHere == false && ghosts.length < 5){
+            var newEnem = spawnEnemies(ghosts(i), "g")
+            newGhosts +:= newEnem._1
+            newGhosts +:= newEnem._2
+          }
+      }
+      for(i <- 0 until newGhosts.length){
+        currentLevel += newGhosts(i)
+      }
 
-    if(demons.filter(_.stillHere).length < 2){
-      var tempDemon = new Demon(50, 21, currentLevel)
-      var newEnem = spawnEnemies(tempDemon, "d")
-      newDemons +:= newEnem._1
-      newDemons +:= newEnem._2
-    }
-    for(i <- 0 until newDemons.length) currentLevel += newDemons(i)
+      var newDemons = Seq[Entity]()
+      if(demons.filter(_.stillHere).length < 2){
+        var tempDemon = new Demon(50, 21, currentLevel)
+        var newEnem = spawnEnemies(tempDemon, "d")
+        newDemons +:= newEnem._1
+        newDemons +:= newEnem._2
+      }
+      for(i <- 0 until newDemons.length){
+        println("new demon")
+        currentLevel += newDemons(i)
+      }
 
     _entities = _entities.filter(_.stillHere)
     for (i <- 0 until _entities.length) {

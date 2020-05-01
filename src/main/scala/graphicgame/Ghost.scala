@@ -5,7 +5,7 @@ class Ghost (private var _x: Double, private var _y: Double, val level:Level) ex
     private var dir: Int = 0
     def x: Double = _x
     def y: Double = _y
-    def width: Double = 1.3
+    def width: Double = 1
     def height: Double = 1.3
     val speed = 4.5
 
@@ -108,13 +108,16 @@ class Ghost (private var _x: Double, private var _y: Double, val level:Level) ex
 
     def stillHere(): Boolean = {
         var ret = true
+        var player:Player = null
         if(level.bullets.length > 0){
             for(i <- 0 until level.bullets.length){
                 if(Entity.intersect(this, level.bullets(i))){
+                    if (player == null) player = level.bullets(i).shooter
                     ret = false
                 }
             }
         }
+        if(player != null) player.score += 50
         return ret
     }
 

@@ -80,7 +80,7 @@ object Server extends App {
                 }
 
                 if (sendUpdate) {
-                    pc.out.writeObject(new UpdateInfo(level.buildPassable, pc.player.x, pc.player.y))
+                    pc.out.writeObject(new UpdateInfo(level.buildPassable, pc.player.x, pc.player.y, pc.player.score))
                     pc.out.flush()
                 }
             }

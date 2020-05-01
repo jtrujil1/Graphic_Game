@@ -2,6 +2,9 @@ package graphicgame
 
 import scalafx.scene.canvas.GraphicsContext
 import scalafx.scene.image.Image
+import scala.collection.mutable
+import scalafx.scene.text.Font
+import scalafx.scene.paint.Color
 
 /**
  * This is a 2D renderer that with draw your game elements to a Canvas. You should change the
@@ -16,10 +19,10 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
   private val floorImage = Renderer2D.loadImage("/images/floor.png")
   private val wallImage = Renderer2D.loadImage("/images/stonewall2.png")
   private val playerImage = Renderer2D.loadImage("/images/player.png")
-  private val ghostImage = Renderer2D.loadImage("/images/enemy.png")
-  private val demonImage = Renderer2D.loadImage("/images/demon.png")
+  private val ghostImage = Renderer2D.loadImage("/images/demon.png")
+  private val demonImage = Renderer2D.loadImage("/images/enemy.png")
   private val bulletImage = Renderer2D.loadImage("/images/bullet3.png")
-  private val fireImage = Renderer2D.loadImage("/images/fire.png")
+  private val fireImage = Renderer2D.loadImage("/images/fire2.png")
 
   /**
    * These two methods are used to figure out where to draw things. They are used by the render.
@@ -36,7 +39,7 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
   /**
    * This method is called to render things to the screen.
    */
- def render(level: PassableLevel, cx: Double, cy: Double): Unit = {
+ def render(level: PassableLevel, cx: Double, cy: Double, score: Int): Unit = {
    lastCenterX = cx
    lastCenterY = cy
 
@@ -71,8 +74,14 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
    	  gc.drawImage(img, blocksToPixelsX(e.x-e.width/2), blocksToPixelsY(e.y-e.height/2), e.width*blockSize, e.height*blockSize)
      }
    }
- }
 
+   //Draw score
+    gc.setFont(new Font("Lucida Console", 45))
+    gc.setFill(Color.WhiteSmoke)
+    gc.setLineWidth(2)
+    gc.fillText(s"Score: ${score.toString}", cx + 15, cy + 60)
+    gc.strokeText(s"Score: ${score.toString}", cx + 15, cy + 60)
+  }
 }
 
 object Renderer2D {

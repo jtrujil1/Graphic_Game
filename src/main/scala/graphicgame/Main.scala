@@ -59,7 +59,7 @@ object Main extends JFXApp {
           			val delay = (time - lastTime)/1e9
 					level1.updateAll(delay)
 					val pl = level1.buildPassable
-					renderer.render(pl, player.x, player.y)
+					renderer.render(pl, player.x, player.y, 0)
         		}
         		lastTime = time
       		})

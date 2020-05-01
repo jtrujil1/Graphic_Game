@@ -19,6 +19,8 @@ object Client extends JFXApp {
     val oos = new ObjectOutputStream(sock.getOutputStream())
     val ois = new ObjectInputStream(sock.getInputStream())
 
+    var score = 0
+
 
     stage = new JFXApp.PrimaryStage {
 		title = "Adventures of Sergio"
@@ -46,7 +48,7 @@ object Client extends JFXApp {
                         case _ => println("Error with package sent to client.")
                         null
                     }
-                    Platform.runLater(renderer.render(pl.level, pl.px, pl.py))
+                    Platform.runLater(renderer.render(pl.level, pl.px, pl.py, pl.score))
                 }
             }
         }

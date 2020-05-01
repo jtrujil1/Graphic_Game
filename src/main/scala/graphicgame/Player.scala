@@ -4,10 +4,10 @@ import scalafx.scene.input.KeyCode
 
 class Player (private var _x: Double, private var _y: Double, val level: Level) extends Entity {
     def currentPlayer = this
-
+    var score:Int = 0
     def x: Double = _x
     def y: Double = _y
-    def width: Double = 1.3
+    def width: Double = 1
     def height: Double = 1.3
 
     def initialLocation(): Unit = {
@@ -43,7 +43,7 @@ class Player (private var _x: Double, private var _y: Double, val level: Level) 
     }
 
     var moveDelay = 0.0
-    var moveInterval = 0.08
+    var moveInterval = 0.1
 
     def update(delay: Double): Unit = {
         var speed = 9
@@ -54,28 +54,28 @@ class Player (private var _x: Double, private var _y: Double, val level: Level) 
         if (keysHeld(KeyData.Right)) move(speed*delay, 0, moveAllowed(_x + speed*delay, _y))
         if (keysHeld(KeyData.W)){
             if(moveDelay >= moveInterval){
-                var bullet = new Bullet(_x, _y - 1, level, "u")
+                var bullet = new Bullet(_x, _y - 1, level, "u", currentPlayer)
                 level += bullet
                 moveDelay = 0.0
             }
         }
         if (keysHeld(KeyData.A)){
             if(moveDelay >= moveInterval){
-                var bullet = new Bullet(_x - 1, _y, level, "l")
+                var bullet = new Bullet(_x - 1, _y, level, "l", currentPlayer)
                 level += bullet
                 moveDelay = 0.0
             }
         }
         if (keysHeld(KeyData.S)){
             if(moveDelay >= moveInterval){
-                var bullet = new Bullet(_x, _y + 1, level, "d")
+                var bullet = new Bullet(_x, _y + 1, level, "d", currentPlayer)
                 level += bullet
                 moveDelay = 0.0
             }
         }
         if (keysHeld(KeyData.D)){
             if(moveDelay >= moveInterval){
-                var bullet = new Bullet(_x + 1, _y, level, "r")
+                var bullet = new Bullet(_x + 1, _y, level, "r", currentPlayer)
                 level += bullet
                 moveDelay = 0.0
             }
