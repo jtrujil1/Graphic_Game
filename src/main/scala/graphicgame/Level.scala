@@ -93,7 +93,7 @@ class Level(val maze: Maze, private var _entities: Seq[Entity]) {
   def updateAll(delay: Double): Unit = {
       var newGhosts = Seq[Entity]()
       for(i <- 0 until ghosts.length){
-          if(ghosts(i).stillHere == false && ghosts.length < 5){
+          if(ghosts(i).stillHere == false && ghosts.length < 14){
             var newEnem = spawnEnemies(ghosts(i), "g")
             newGhosts +:= newEnem._1
             newGhosts +:= newEnem._2
