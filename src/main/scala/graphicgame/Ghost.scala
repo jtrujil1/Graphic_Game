@@ -7,7 +7,7 @@ class Ghost (private var _x: Double, private var _y: Double, val level:Level) ex
     def y: Double = _y
     def width: Double = 1
     def height: Double = 1.3
-    val speed = 4.5
+    val speed = 5.5
 
     def enemy = this
 

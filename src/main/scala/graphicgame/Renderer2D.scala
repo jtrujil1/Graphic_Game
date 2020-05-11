@@ -76,11 +76,9 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
    }
 
    //Draw score
-    gc.setFont(new Font("Lucida Console", 45))
-    gc.setFill(Color.WhiteSmoke)
-    gc.setLineWidth(2)
-    gc.fillText(s"Score: ${score.toString}", cx + 15, cy + 60)
-    gc.strokeText(s"Score: ${score.toString}", cx + 15, cy + 60)
+    gc.setFont(new Font("Gruppo", 45))
+    gc.setFill(Color.rgb(255, 153, 51))
+    gc.fillText(s"Score: ${score.toString}", cx, cy+60)
   }
 }
 

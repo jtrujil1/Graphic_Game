@@ -53,7 +53,7 @@ class Demon (private var _x: Double, private var _y: Double, val level:Level) ex
             if(!canMove){
                 direction = directionsArr(util.Random.nextInt(4))
             }
-            if(count%11 == 0){
+            if(count%9 == 0){
                 if(count%10 == 4){
                     var fire1 = new DemonFire(_x, _y - 1, level, "u")
                     var fire2 = new DemonFire(_x - 1, _y, level, "l")

@@ -10,7 +10,7 @@ class DemonFire(private var _x: Double, private var _y: Double, val level: Level
     def currentBullet = this
 
     def move(delay: Double, dir: String) = {
-        var speed = 7
+        var speed = 8
         var dx = 0.0
         var dy = 0.0
         dir match {

@@ -104,14 +104,13 @@ class Level(val maze: Maze, private var _entities: Seq[Entity]) {
       }
 
       var newDemons = Seq[Entity]()
-      if(demons.filter(_.stillHere).length < 2){
+      if(demons.filter(_.stillHere).length < 4){
         var tempDemon = new Demon(50, 21, currentLevel)
         var newEnem = spawnEnemies(tempDemon, "d")
         newDemons +:= newEnem._1
         newDemons +:= newEnem._2
       }
       for(i <- 0 until newDemons.length){
-        println("new demon")
         currentLevel += newDemons(i)
       }
 
